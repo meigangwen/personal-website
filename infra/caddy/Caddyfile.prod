@@ -1,0 +1,8 @@
+meigangwen.com {
+  # Next.js website
+  reverse_proxy /_next/* web:3000
+  reverse_proxy / web:3000
+
+  # Python API
+  # reverse_proxy /api/* api:8000
+}

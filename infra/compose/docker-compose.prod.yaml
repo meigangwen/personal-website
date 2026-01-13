@@ -4,13 +4,17 @@ services:
   # ------------------
   caddy:
     image: caddy:2
-    container_name: dev-caddy
+    container_name: prod-caddy
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      - ../caddy/Caddyfile.dev:/etc/caddy/Caddyfile:ro
+      - ../caddy/Caddyfile.prod:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - web
+
     restart: unless-stopped
 
   # ------------------
@@ -27,3 +31,7 @@ services:
       - NODE_ENV=development
     expose:
       - "3000"
+
+  volumes:
+    caddy_data:
+    caddy_config:
