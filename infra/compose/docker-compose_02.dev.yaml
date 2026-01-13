@@ -1,0 +1,72 @@
+services:
+  # ------------------
+  # Edge proxy (local)
+  # ------------------
+  caddy:
+    image: caddy:2
+    container_name: dev-caddy
+    ports:
+      - "80:80"
+    volumes:
+      - ../caddy/Caddyfile.dev:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - web
+      - api
+    restart: unless-stopped
+
+  # ------------------
+  # Next.js (dev mode)
+  # ------------------
+  web:
+    image: node:20-alpine
+    container_name: dev-web
+    working_dir: /app
+    volumes:
+      - ../../web:/app
+    command: sh -c "yarn install && yarn dev -p 3000"
+    environment:
+      - NODE_ENV=development
+      # browser calls /api, server can call api:8000 if needed
+      - NEXT_PUBLIC_API_BASE=/api
+      - API_INTERNAL_BASE=http://api:8000
+    expose:
+      - "3000"
+    depends_on:
+      - api
+
+  # ------------------
+  # Python API (dev)
+  # ------------------
+  api:
+    build:
+      context: ../../api
+      dockerfile: Dockerfile
+    container_name: dev-api
+    volumes:
+      - ../../api:/app
+    command: >
+      sh -c "pip install -r requirements.txt &&
+             uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+    environment:
+      - ENV=development
+      - VECTOR_DB_URL=http://chroma:8000
+    expose:
+      - "8000"
+    depends_on:
+      - chroma
+
+  # ------------------
+  # Vector DB (local)
+  # ------------------
+
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: dev-chroma
+    volumes:
+      - chroma_data:/chroma/chroma
+    ports:
+      - "8001:8000" # optional: inspect chroma directly
+    restart: unless-stopped
+
+volumes:
+  chroma_data:

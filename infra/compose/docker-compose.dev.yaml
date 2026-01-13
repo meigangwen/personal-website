@@ -1,0 +1,27 @@
+services:
+  # ------------------
+  # Edge proxy (local)
+  # ------------------
+  caddy:
+    image: caddy:2
+    container_name: dev-caddy
+    ports:
+      - "80:80"
+    volumes:
+      - ../caddy/Caddyfile.dev:/etc/caddy/Caddyfile:ro
+    restart: unless-stopped
+
+  # ------------------
+  # Next.js (dev mode)
+  # ------------------
+  web:
+    image: node:20-alpine
+    container_name: dev-web
+    working_dir: /app
+    volumes:
+      - ../../web:/app
+    command: sh -c "yarn install && yarn dev -p 3000"
+    environment:
+      - NODE_ENV=development
+    expose:
+      - "3000"
