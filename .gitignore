@@ -1,0 +1,25 @@
+# Node / Next
+web/node_modules/
+web/.next/
+web/out/
+web/.env*
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+
+# Python
+api/.venv/
+api/venv/
+api/__pycache__/
+api/*.pyc
+api/.pytest_cache/
+api/.mypy_cache/
+
+# Infra local state (if any)
+infra/**/.env*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
