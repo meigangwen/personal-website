@@ -1,3 +1,6 @@
+# ========================
+# Stage 1: Deps
+# ========================
 FROM node:20-alpine AS deps
 WORKDIR /app
 
@@ -12,6 +15,30 @@ RUN \
   elif [ -f pnpm-lock.yaml ]; then corepack enable && pnpm install --frozen-lockfile; \
   else echo "No lockfile found" && exit 1; \
   fi
+
+# ========================
+# Stage 1b: Dev Runner
+# ========================
+FROM node:20-alpine AS dev
+WORKDIR /app
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+# Copy installed deps from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+EXPOSE 3000
+
+# Dev server MUST bind to 0.0.0.0 for other containers (Caddy) to reach it
+# Yarn:
+CMD ["yarn", "dev", "-H", "0.0.0.0", "-p", "3000"]
+# If you use npm, replace with:
+# CMD ["npm", "run", "dev", "--", "-H", "0.0.0.0", "-p", "3000"]
+# If you use pnpm, replace with:
+# CMD ["pnpm", "dev", "--", "-H", "0.0.0.0", "-p", "3000"]
+
 
 # ========================
 # Stage 2: Builder
