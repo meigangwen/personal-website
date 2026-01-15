@@ -1,0 +1,28 @@
+services:
+  # ------------------
+  # Edge proxy (local)
+  # ------------------
+  caddy:
+    image: caddy:2
+    container_name: dev-caddy
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile.dev:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+
+  # ------------------
+  # Next.js (dev mode)
+  # ------------------
+  web:
+    build:
+      context: ../../web
+      dockerfile: Dockerfile
+    container_name: prod-web
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    stdin_open: true
+    tty: true

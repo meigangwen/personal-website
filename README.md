@@ -1,2 +1,9 @@
-# To run dev containers locally
-docker compose -f ./docker-compose.dev.yml up
+# To run containers locally
+
+cd infra/dev
+docker compose up -d
+
+# To run dev on web locally
+
+cd web
+yarn dev
