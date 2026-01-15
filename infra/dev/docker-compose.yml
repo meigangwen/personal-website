@@ -20,6 +20,7 @@ services:
     build:
       context: ../../web
       dockerfile: Dockerfile
+    image: meigangwen/website-web
     container_name: prod-web
     environment:
       - NODE_ENV=production
