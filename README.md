@@ -1,9 +1,10 @@
 # To run containers locally
 
-cd infra/dev
+cd infra/dev\
 docker compose up -d
 
 # To run dev on web locally
 
-cd web
+cd web\
 yarn dev
+
