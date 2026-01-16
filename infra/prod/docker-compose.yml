@@ -24,7 +24,6 @@ services:
     container_name: prod-web
     environment:
       - NODE_ENV=production
-      - HOSTNAME="0.0.0.0"
       - PORT=3000
     stdin_open: true
     tty: true
