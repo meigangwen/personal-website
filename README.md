@@ -8,6 +8,11 @@ ssh my-lightsail\
 cd /srv/deploy\
 git pull
 
+# To run containers remotely
+
+cd /srv/deploy/infra/prod\
+docker compose up -d
+
 # To run containers locally
 
 cd infra/dev\
