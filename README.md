@@ -1,3 +1,13 @@
+# To connect to lightsail instance
+
+run cmd\
+ssh my-lightsail\
+
+# To update git repo
+
+cd /srv/deploy\
+git pull
+
 # To run containers locally
 
 cd infra/dev\
